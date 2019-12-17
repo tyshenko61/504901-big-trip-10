@@ -115,7 +115,7 @@ const createCardTemplate = () => {
          </div>
      </li>`
   );
-}
+};
 const createCardEditTemplate = () => {
   return (
     `<li class="trip-events__item">
@@ -308,12 +308,12 @@ const createCardEditTemplate = () => {
                   </form>
                 </li>`
   );
-}
+};
 const createTripEventsListTemplate = () => {
   return (
     `<ul class="trip-events__list"></ul>`
   );
-}
+};
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
