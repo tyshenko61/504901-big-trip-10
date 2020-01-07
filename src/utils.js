@@ -1,3 +1,5 @@
+import CardComponent from './components/card';
+import CardEditComponent from './components/edit-card';
 const MONTHNAMES = [
   `JAN`,
   `FEB`,
@@ -84,4 +86,47 @@ export const formatDateList = (date) => {
   const month = MONTHNAMES[num];
   const day = parseInt(date.slice(0, 2), 10);
   return `${month} ${day}`;
+};
+
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterEnd`
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+export const renderEvent = (event, element) => {
+  const card = new CardComponent(event);
+  const cardEdit = new CardEditComponent(event);
+  const buttonRollupEvent = card.getElement().querySelector(`.event__rollup-btn`);
+  buttonRollupEvent.addEventListener(`click`, () => {
+    element.replaceChild(cardEdit.getElement(), card.getElement());
+  });
+
+  const formEventEdit = cardEdit.getElement();
+  formEventEdit.addEventListener(`submit`, () => {
+    element.replaceChild(card.getElement(), cardEdit.getElement());
+  });
+
+  const buttonRollupEventEdit = cardEdit.getElement();
+  buttonRollupEventEdit.addEventListener(`click`, () => {
+    element.replaceChild(card.getElement(), cardEdit.getElement());
+  });
+  render(element, card.getElement(), RenderPosition.BEFOREEND);
 };

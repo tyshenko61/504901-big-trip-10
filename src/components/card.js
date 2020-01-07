@@ -1,5 +1,7 @@
 import {formatTime} from '../utils.js';
 import {duration} from '../utils.js';
+import {createElement} from "../utils";
+
 const listOffers = (offers) => {
   return Array.from(offers.slice(0, 3)).map((offer) => {
     const {name} = offer;
@@ -11,9 +13,9 @@ const listOffers = (offers) => {
                         &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
         </li>`
     );
-  });
+  }).join(`\n`);
 };
-export const createCardTemplate = (point) => {
+const createCardTemplate = (point) => {
   const {type, date, offers, cost} = point;
   const {name, icon, action} = type;
   const time1 = formatTime(date[0]);
@@ -57,3 +59,26 @@ export const createCardTemplate = (point) => {
      </li>`
   );
 };
+
+export default class Card {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createCardTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

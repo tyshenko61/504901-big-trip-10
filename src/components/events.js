@@ -1,18 +1,20 @@
 import {createElement} from "../utils";
 
-const createTripEventsListTemplate = () => {
-  /* const setDates = listDate(points);
-  const itemsDay = markupDay(setDates, points); */
-  return `<ul class="trip-days">
-        
-      </ul>`;
+const createTemplateEvents = () => {
+  return (
+    `<ul class="trip-events__list">
+
+    </ul>`
+  );
 };
-export default class TripEventsList {
+
+export default class Events {
   constructor() {
     this._element = null;
   }
+
   getTemplate() {
-    return createTripEventsListTemplate();
+    return createTemplateEvents();
   }
 
   getElement() {
