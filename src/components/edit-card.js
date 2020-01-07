@@ -1,6 +1,7 @@
 import {TYPES} from "../constant";
 import {CITIES} from "../constant.js";
 import {formatDateTime} from '../utils.js';
+import {createElement} from "../utils";
 
 const createImages = (url) => {
   return (
@@ -48,7 +49,7 @@ const createOffers = (offers) => {
     }).join(`\n`);
 };
 
-export const createCardEditTemplate = (point) => {
+const createCardEditTemplate = (point) => {
   const {type, date, offers, city, cost, url, description} = point;
   const {name, icon, action} = type;
   const from = formatDateTime(date[0]);
@@ -166,3 +167,27 @@ export const createCardEditTemplate = (point) => {
                 </li>`
   );
 };
+
+export default class CardEdit {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createCardEditTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+

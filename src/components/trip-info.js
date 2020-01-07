@@ -1,5 +1,5 @@
 // Маршрут
-import {formatInfoDate} from "../utils";
+import {createElement, formatInfoDate} from "../utils";
 const listCyties = (points) => {
   const str = [`Ekaterinburg`];
   points.map((point) => {
@@ -36,8 +36,10 @@ export const allCost = (points) => {
   });
   return cost;
 };
-export const createTripInfoTemplate = (points) => {
-  const duration = formatInfoDate(points[0].date[0], points[points.length - 1].date[1]);
+const createTripInfoTemplate = (points) => {
+  const point1 = points[0];
+  const point2 = points[points.length - 1];
+  const duration = formatInfoDate(point1.date[0], point2.date[1]);
   const list = listCyties(points);
   const str = strPoints(list);
   const cost = allCost(points);
@@ -50,5 +52,27 @@ export const createTripInfoTemplate = (points) => {
      </div>`
   );
 };
+
+export default class TripInfo {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+  getTemplate() {
+    return createTripInfoTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
 
 
