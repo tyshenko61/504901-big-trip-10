@@ -112,11 +112,20 @@ export const render = (container, element, place) => {
   }
 };
 export const renderEvent = (event, element) => {
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      element.replaceChild(card.getElement(), cardEdit.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
   const card = new CardComponent(event);
   const cardEdit = new CardEditComponent(event);
   const buttonRollupEvent = card.getElement().querySelector(`.event__rollup-btn`);
   buttonRollupEvent.addEventListener(`click`, () => {
     element.replaceChild(cardEdit.getElement(), card.getElement());
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   const formEventEdit = cardEdit.getElement();
@@ -124,7 +133,7 @@ export const renderEvent = (event, element) => {
     element.replaceChild(card.getElement(), cardEdit.getElement());
   });
 
-  const buttonRollupEventEdit = cardEdit.getElement();
+  const buttonRollupEventEdit = cardEdit.getElement().querySelector(`.event__rollup-btn`);
   buttonRollupEventEdit.addEventListener(`click`, () => {
     element.replaceChild(card.getElement(), cardEdit.getElement());
   });
