@@ -33,7 +33,7 @@ const renderTripEvents = (tripEventsComponent, points) => {
     render(dayComponent.getElement(), eventsComponent.getElement(), RenderPosition.BEFOREEND);
     day.points.forEach((point) => renderEvent(point, eventsComponent.getElement()));
   });
-}
+};
 let points = generatePoints(TASK_COUNT);
 points.sort(compare);
 const days = generateDays(points);
