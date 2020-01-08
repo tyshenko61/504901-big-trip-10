@@ -1,4 +1,4 @@
-import {formatDate} from "../utils";
+import {formatDate} from "../utils/format.js";
 
 const getDaysEvents = (points) => {
   const uniqueDays = points.map((point) => {
