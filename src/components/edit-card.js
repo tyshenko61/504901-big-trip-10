@@ -1,7 +1,7 @@
 import {TYPES} from "../constant";
 import {CITIES} from "../constant.js";
-import {formatDateTime} from '../utils.js';
-import {createElement} from "../utils";
+import {formatDateTime} from '../utils/format.js';
+import AbstractComponent from "./abstract-component.js";
 
 const createImages = (url) => {
   return (
@@ -168,26 +168,31 @@ const createCardEditTemplate = (point) => {
   );
 };
 
-export default class CardEdit {
+export default class CardEdit extends AbstractComponent {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+    this._type = this._point.type;
+    this._date = this._point.date;
+    this._offers = this._point.offers;
+    this._city = this._point.city;
+    this._cost = this._point.cost;
+    this._url = this._point.url;
+    this._description = this._point.description;
+    this._isPast = this._point.isPast;
   }
 
   getTemplate() {
     return createCardEditTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setButtonRollupClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
   }
 }
-

@@ -1,6 +1,5 @@
-import {formatTime} from '../utils.js';
-import {duration} from '../utils.js';
-import {createElement} from "../utils";
+import {formatTime, duration} from '../utils/format.js';
+import AbstractComponent from './abstract-component.js';
 
 const listOffers = (offers) => {
   return Array.from(offers.slice(0, 3)).map((offer) => {
@@ -60,25 +59,17 @@ const createCardTemplate = (point) => {
   );
 };
 
-export default class Card {
+export default class Card extends AbstractComponent {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createCardTemplate(this._point);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setButtonRollupClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 }

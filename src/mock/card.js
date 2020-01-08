@@ -76,7 +76,8 @@ const generatePoint = () => {
     city: Math.random() > 0.5 ? getRandomArrayItem(CITIES) : ``,
     cost: getRandomIntegerNumber(5, 100),
     url: `http://picsum.photos/300/150?r=${Math.random()}`,
-    description: generateDesc()
+    description: generateDesc(),
+    isPast: Math.random() > 0.5
   };
 };
 const generatePoints = (count) => {

@@ -1,5 +1,5 @@
-// Маршрут
-import {createElement, formatInfoDate} from "../utils";
+import {formatInfoDate} from "../utils/format.js";
+import AbstractComponent from "./abstract-component.js";
 const listCyties = (points) => {
   const str = [`Ekaterinburg`];
   points.map((point) => {
@@ -53,25 +53,13 @@ const createTripInfoTemplate = (points) => {
   );
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
   getTemplate() {
     return createTripInfoTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
