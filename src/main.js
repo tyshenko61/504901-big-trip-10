@@ -5,7 +5,7 @@ import {compare} from './mock/card.js';
 import {render, RenderPosition} from "./utils/render.js";
 import TripController from "./controllers/trip-controller";
 
-const TASK_COUNT = 3;
+const TASK_COUNT = 10;
 
 let points = generatePoints(TASK_COUNT);
 points.sort(compare);
