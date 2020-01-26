@@ -1,3 +1,20 @@
+import flatpickr from "flatpickr";
+import moment from "moment";
+import {Russian} from "flatpickr/dist/l10n/ru.js";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/light.css";
+
+export const setFlatpickr = (element, date) => {
+  return flatpickr(element, {
+    allowInput: true,
+    defaultDate: date,
+    enableTime: true,
+    locale: Russian,
+    dateFormat: `m/d/y H:i`,
+    altInput: true,
+    altFormat: `d/m/y H:i`,
+  });
+};
 const MONTHNAMES = [
   `JAN`,
   `FEB`,
@@ -12,7 +29,7 @@ const MONTHNAMES = [
   `NOV`,
   `DEC`,
 ];
-export const formatDateTime = (date) => {
+/* export const formatDateTime = (date) => {
   const time = formatTime(date);
   const day = date.getDate();
   const dayDate = day < 10 ? `0${day}` : `${day}`;
@@ -21,16 +38,17 @@ export const formatDateTime = (date) => {
   const year = date.getFullYear().toString(10).slice(2);
   return `${dayDate}/${monthDate}/${year} ${time}`;
 };
-
+*/
 export const formatDate = (date) => {
-  const day = date.getDate();
-  const dayDate = day < 10 ? `0${day}` : `${day}`;
+  return moment(date).format(`DD/MM/YY`);
+  /*const day = date.getDate();
+   const dayDate = day < 10 ? `0${day}` : `${day}`;
   const month = date.getMonth() + 1;
   const monthDate = month < 10 ? `0${month}` : `${month}`;
   const year = date.getFullYear().toString(10).slice(2);
-  return `${dayDate}/${monthDate}/${year}`;
+  return `${dayDate}/${monthDate}/${year}`;*/
 };
-
+/*
 export const formatTime = (date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -38,14 +56,14 @@ export const formatTime = (date) => {
   const minutesDate = minutes < 10 ? `0${minutes}` : `${minutes}`;
   return `${hoursDate}:${minutesDate}`;
 };
+*/
 export let duration;
 duration = (date1, date2) => {
-  const diffDate = date2 - date1;
-  let minutes = Math.round(diffDate / (60 * 1000));
-  let hours = Math.floor(minutes / 60);
-  let day = Math.floor(hours / 24);
-  minutes -= hours * 60;
-  hours -= day * 24;
+  const diffTime = moment(date2).diff(date1);
+  const mDuration = moment.duration(diffTime);
+  let day = mDuration.days();
+  let hours = mDuration.hours();
+  let minutes = mDuration.minutes();
   if (day === 0) {
     day = ``;
   } else if (day >= 9) {

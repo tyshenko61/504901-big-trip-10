@@ -42,22 +42,18 @@ const generateOffer = () => {
 
 const generateOffers = (count) => {
   let offers = [];
-  let genoffers = [];
+  let genOffers = [];
   for (let i = 0; i < count; i++) {
     let offer = generateOffer();
     if (!offers.includes(offer.name)) {
-      offers.push(offer);
-      genoffers.push(offer);
+      offers.push(offer.name);
+      genOffers.push(offer);
     }
-
-    /*return new Array(count)
-      .fill(``)
-      .map(generateOffer);*/
   }
-  return genoffers;
+  return genOffers;
 }
 
-  const getRandomArrayItem = (array) => {
+const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
   return array[randomIndex];
 };
