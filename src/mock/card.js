@@ -41,13 +41,24 @@ const generateOffer = () => {
 };
 
 const generateOffers = (count) => {
-  return new Array(count)
-    .fill(``)
-    .map(generateOffer);
-};
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
+  let offers = [];
+  let genoffers = [];
+  for (let i = 0; i < count; i++) {
+    let offer = generateOffer();
+    if (!offers.includes(offer.name)) {
+      offers.push(offer);
+      genoffers.push(offer);
+    }
 
+    /*return new Array(count)
+      .fill(``)
+      .map(generateOffer);*/
+  }
+  return genoffers;
+}
+
+  const getRandomArrayItem = (array) => {
+  const randomIndex = getRandomIntegerNumber(0, array.length);
   return array[randomIndex];
 };
 
@@ -90,4 +101,4 @@ const compare = (a, b) => {
   return a.date[0] > b.date[0] ? 1 : -1;
 };
 
-export {generatePoint, generatePoints, compare};
+export {generatePoint, generatePoints, compare, generateOffers, getRandomIntegerNumber, generateDesc};

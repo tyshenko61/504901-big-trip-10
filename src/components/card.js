@@ -1,4 +1,4 @@
-import {formatTime, duration} from '../utils/format.js';
+import {formatTime, duration, getDestination} from '../utils/format.js';
 import AbstractComponent from './abstract-component.js';
 
 const listOffers = (offers) => {
@@ -19,7 +19,7 @@ const createCardTemplate = (point) => {
   const {name, icon, action} = type;
   const time1 = formatTime(date[0]);
   const time2 = formatTime(date[1]);
-  const destination = name[0].toUpperCase() + name.slice(1) + ` ` + action;
+  const destination = getDestination(name, action);
   const diffTime = duration(date[0], date[1]);
   const activeOffers = offers.filter((it) => {
     return it.isCheck;
@@ -70,6 +70,10 @@ export default class Card extends AbstractComponent {
   }
   setButtonRollupClickHandler(handler) {
     this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+  }
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--favorites`)
       .addEventListener(`click`, handler);
   }
 }
