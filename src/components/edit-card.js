@@ -1,9 +1,9 @@
 import {TYPES} from "../constant";
 import {CITIES} from "../constant.js";
-import {formatDateTime, getDestination} from '../utils/format.js';
+import {getDestination, setFlatpickr} from '../utils/format.js';
 import AbstractSmartComponent from "./abstract-smart-component";
-import {generateOffers, getRandomIntegerNumber, generateDesc} from "../mock/card.js"
-
+import {generateOffers, getRandomIntegerNumber, generateDesc} from "../mock/card.js";
+import moment from "moment";
 const createImages = (url) => {
   return (
     `<img class="event__photo" src="${url}" alt="Event photo">
@@ -74,14 +74,20 @@ export default class CardEdit extends AbstractSmartComponent {
     this._destination = getDestination(this._pointTypeName, this._typeGroop);
     this._favoriteClickHandler = null;
     this._buttonRollupClickHandler = null;
+    this._submitHandler = null;
+    this._flatpickr = {
+      start: null,
+      end: null
+    };
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
   _createCardEditTemplate() {
-    const from = formatDateTime(this._dateBegin);
-    const to = formatDateTime(this._dateEnd);
     const itemsTypeTo = createItems(typesTo, this._pointTypeName);
     const itemsTypeIn = createItems(typesIn, this._pointTypeName);
     const options = createOptions();
+    const dateBegin = moment(this._dateBegin).format(`DD/MM/YYYY HH:mm`);
+    const dateEnd = moment(this._dateEnd).format(`DD/MM/YYYY HH:mm`);
     const available = createOffers(this._offers);
     const image1 = createImages(this._url);
     const image2 = createImages(this._url);
@@ -123,12 +129,11 @@ export default class CardEdit extends AbstractSmartComponent {
                         <label class="visually-hidden" for="event-start-time-1">
                           From
                         </label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${from}">
-                        &mdash;
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateBegin}">
                         <label class="visually-hidden" for="event-end-time-1">
                           To
                         </label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${to}">
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}">
                       </div>
 
                       <div class="event__field-group  event__field-group--price">
@@ -180,7 +185,7 @@ export default class CardEdit extends AbstractSmartComponent {
                   </form>
                 </li>`
     );
-  };
+  }
 
   getTemplate() {
     return this._createCardEditTemplate();
@@ -189,6 +194,7 @@ export default class CardEdit extends AbstractSmartComponent {
   recoveryListeners() {
     this.setButtonRollupClickHandler(this._buttonRollupClickHandler);
     this.setFavoriteButtonClickHandler(this._favoriteClickHandler);
+    this.setSubmitHandler(this._submitHandler);
     this._subscribeOnEvents();
   }
 
@@ -199,8 +205,8 @@ export default class CardEdit extends AbstractSmartComponent {
   }
 
   setSubmitHandler(handler) {
-   /* this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);*/
+    this.getElement().addEventListener(`submit`, handler);
+    this._submitHandler = handler;
   }
 
   setFavoriteButtonClickHandler(handler) {
@@ -210,12 +216,36 @@ export default class CardEdit extends AbstractSmartComponent {
   }
   reset() {
     const point = this._point;
-    /*
-     this._isDateShowing = !!task.dueDate;
-     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
-     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
-*/
+    this._destination = getDestination(this._pointTypeName, this._typeGroop);
+    this._description = point.description;
+    this._dateBegin = point.date[0];
+    this._dateEnd = point.date[1];
     this.rerender();
+  }
+
+  rerender() {
+    super.rerender();
+
+    this._applyFlatpickr();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      if (this._flatpickr.start && this._flatpickr.end) {
+        for (let date of Object.keys(this._flatpickr)) {
+          this._flatpickr[date].destroy();
+          this._flatpickr[date] = null;
+        }
+      }
+      const dates = Array.from(this.getElement().querySelectorAll(`.event__input--time`));
+      const eventStart = dates[0];
+      const eventEnd = dates[1];
+
+      this._flatpickr.start = setFlatpickr(eventStart, this._dateBegin);
+      this._flatpickr.end = setFlatpickr(eventEnd, this._dateEnd);
+    }
   }
   _subscribeOnEvents() {
     const element = this.getElement();
@@ -239,6 +269,21 @@ export default class CardEdit extends AbstractSmartComponent {
       } else {
         evt.target.setCustomValidity(`Необходимо выбрать город из списка`);
       }
+    });
+
+    Array.from(element.querySelectorAll(`.event__input--time`)).map((dateElement) => {
+      dateElement.addEventListener(`change`, (evt) => {
+        const currentStartDate = new Date(this._flatpickr.start.input.value);
+        const currentEndDate = new Date(this._flatpickr.end.input.value);
+        if ((moment(currentEndDate).isBefore(moment(currentStartDate)))) {
+          evt.target.nextSibling.setCustomValidity(`Дата окончания не может быть меньше даты начала события`);
+        } else {
+          evt.target.nextSibling.setCustomValidity(``);
+          this._dateBegin = currentStartDate;
+          this._dateEnd = currentEndDate;
+          this.rerender();
+        }
+      });
     });
   }
 }

@@ -1,5 +1,6 @@
-import {formatTime, duration, getDestination} from '../utils/format.js';
+import {duration, getDestination} from '../utils/format.js';
 import AbstractComponent from './abstract-component.js';
+import moment from "moment";
 
 const listOffers = (offers) => {
   return Array.from(offers.slice(0, 3)).map((offer) => {
@@ -17,8 +18,6 @@ const listOffers = (offers) => {
 const createCardTemplate = (point) => {
   const {type, date, offers, cost} = point;
   const {name, icon, action} = type;
-  const time1 = formatTime(date[0]);
-  const time2 = formatTime(date[1]);
   const destination = getDestination(name, action);
   const diffTime = duration(date[0], date[1]);
   const activeOffers = offers.filter((it) => {
@@ -35,9 +34,9 @@ const createCardTemplate = (point) => {
     
             <div class="event__schedule">
                 <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T10:30">${time1}</time>
+                    <time class="event__start-time" datetime="${moment(date[0]).format(`YYYY-MM-DDTHH:mm`)}">${moment(date[0]).format(`HH:mm`)}</time>
                         &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T11:00">${time2}</time>
+                    <time class="event__end-time" datetime="${moment(date[1]).format(`YYYY-MM-DDTHH:mm`)}">${moment(date[1]).format(`HH:mm`)}</time>
                 </p>
                 <p class="event__duration">${diffTime}</p>
                 </div>

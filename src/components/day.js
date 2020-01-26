@@ -1,6 +1,7 @@
 import {formatDateList} from "../utils/format.js";
 import AbstractComponent from "./abstract-component.js";
 import {formatDate} from "../utils/format";
+import moment from "moment";
 
 const getDaysEvents = (points) => {
   const uniqueDays = points.map((point) => {
@@ -30,7 +31,7 @@ const createDayBoardTemplate = (tripDays) => {
       `<li class="trip-days__item day">
         <div class="day__info">
           <span class="day__counter">${i + 1}</span>
-          <time class="day__date" datetime="${date}">${dateList}</time>
+          <time class="day__date" datetime="${moment(dayDate).format(`YYYY-MM-DDTHH:mm`)}">${dateList}</time>
         </div>
         <ul class="trip-events__list" data-date="${date}"></ul>
       </li>`
