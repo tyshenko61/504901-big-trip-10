@@ -51,9 +51,21 @@ export const TYPES = [
   },
 ];
 
-export const FILTERNAMES = [
-  `everything`, `future`, `past`,
+export const filters = [
+  {
+    value: `EVERYTHING`,
+    checked: `checked`
+  },
+  {
+    value: `FUTURE`,
+    checked: ``
+  },
+  {
+    value: `PAST`,
+    checked: ``
+  },
 ];
+
 
 export const CITIES = [
   `Ekaterinburg`,
@@ -64,3 +76,16 @@ export const CITIES = [
   `Sofia`,
   `Amsterdam`,
 ];
+export const controls = [
+  {
+    title: `Table`,
+    isActive: `trip-tabs__btn--active`,
+    href: `#`
+  },
+  {
+    title: `Stats`,
+    isActive: ``,
+    href: `#`
+  }
+];
+

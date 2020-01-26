@@ -85,3 +85,7 @@ export const formatDateList = (date) => {
   const day = parseInt(date.slice(0, 2), 10);
   return `${month} ${day}`;
 };
+export const getDestination = (name, group) => {
+  return name[0].toUpperCase() + name.slice(1) + ` ` + group;
+}
+
